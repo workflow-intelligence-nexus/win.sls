@@ -1,5 +1,7 @@
 import { AppError, CommonErrors } from '@helper/app-error';
+import { InitializationMessage } from '@interfaces/initialization-message.interface';
 import { MediaInfoCurlService, Track } from '@services/media-info-curl.service';
+import { IconikService } from '@workflowwin/iconik-api';
 import { MediaInfoUrl } from './media-info.inteface';
 import { MediaInfoService } from './media-info.service';
 
@@ -17,6 +19,8 @@ export class MediaInfoManager {
      */
     this.service = new MediaInfoService();
   }
+
+  initializeMediaInfo(iconikService: IconikService): Promise<InitializationMessage> {}
 
   /**
    * This method implements some feature's functionality

@@ -1,3 +1,5 @@
+import { createIconikService } from '@helper/helper';
+import { InitializationMessage } from '@interfaces/initialization-message.interface';
 import { Handler } from 'aws-lambda';
 
 import { errorHandler } from '@helper/error-handler';
@@ -20,6 +22,29 @@ if (process.env.LAMBDA_TASK_ROOT) {
  * For example, Media Info feature
  * Or CRUD operations for the user entity
  */
+
+export const initializeMediaInfo: Handler<APIGatewayLambdaEvent<null>, InitializationMessage> = async (event) => {
+  log(event);
+  try {
+    /**
+     * Create the manager object
+     */
+    const manager = new MediaInfoManager();
+    /**
+     * Prepare required services
+     */
+    const iconikService = createIconikService();
+    /**
+     * Call the manager's method
+     */
+    return await manager.initializeMediaInfo(iconikService);
+  } catch (e) {
+    /**
+     * Handle all errors
+     */
+    errorHandler(e);
+  }
+};
 
 /**
  * This is a Lambda function
