@@ -22,8 +22,9 @@ if (process.env.LAMBDA_TASK_ROOT) {
  * For example, Media Info feature
  * Or CRUD operations for the user entity
  */
+type MediaInfoInitializationHandler = Handler<APIGatewayLambdaEvent<null>, InitializationMessage | undefined>;
 
-export const initializeMediaInfo: Handler<APIGatewayLambdaEvent<null>, InitializationMessage> = async (event) => {
+export const initializeMediaInfo: MediaInfoInitializationHandler = async (event) => {
   log(event);
   try {
     /**
@@ -60,13 +61,8 @@ export const initializeMediaInfo: Handler<APIGatewayLambdaEvent<null>, Initializ
  * @param event - APIGateway, SQS Trigger, SNS Trigger, etc. event object
  * @param context
  */
-type MediaInfoEvent = APIGatewayLambdaEvent<MediaInfoUrl>;
 
-type MediaInfoResult = Track | undefined;
-
-type MediaInfoHandler = Handler<MediaInfoEvent, MediaInfoResult>;
-
-export const getMediaInfo: MediaInfoHandler = async (event, context) => {
+export const getMediaInfo: Handler<APIGatewayLambdaEvent<MediaInfoUrl>, Track | undefined> = async (event, context) => {
   log(event);
 
   try {
