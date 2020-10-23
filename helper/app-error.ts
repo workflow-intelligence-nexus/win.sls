@@ -125,4 +125,4 @@ export class AppError extends Error {
  */
 
 // if (!user)
-//   throw new AppError(commonErrors.NotFound, 'User does not exist');
+//   throw new AppError(CommonErrors.NotFound, 'User does not exist');

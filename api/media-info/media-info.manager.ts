@@ -20,7 +20,19 @@ export class MediaInfoManager {
     this.service = new MediaInfoService();
   }
 
-  initializeMediaInfo(iconikService: IconikService): Promise<InitializationMessage> {}
+  async initializeMediaInfo(iconikService: IconikService): Promise<InitializationMessage> {
+    try {
+      return {
+        message: 'MediaInfo feature is successfully initialized.',
+      } as InitializationMessage;
+    } catch (e) {
+      console.log(e);
+      throw new AppError(
+        CommonErrors.InternalServerError,
+        'Cannot initialize MediaInfo feature. Connect WIN Support team.'
+      );
+    }
+  }
 
   /**
    * This method implements some feature's functionality
