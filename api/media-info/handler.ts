@@ -1,11 +1,10 @@
-import { createIconikService } from '@helper/helper';
-import { InitializationMessage } from '@interfaces/initialization-message.interface';
-import { Handler } from 'aws-lambda';
-
 import { errorHandler } from '@helper/error-handler';
+import { createIconikService } from '@helper/helper';
 import { log } from '@helper/logger';
-import { MediaInfoCurlService, Track } from '@services/media-info-curl.service';
 import { APIGatewayLambdaEvent } from '@interfaces/api-gateway-lambda.interface';
+import { InitializationMessage } from '@interfaces/initialization-message.interface';
+import { MediaInfoCurlService, Track } from '@services/media-info-curl.service';
+import { Handler } from 'aws-lambda';
 import { MediaInfoUrl } from './media-info.inteface';
 import { MediaInfoManager } from './media-info.manager';
 
