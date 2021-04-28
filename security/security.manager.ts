@@ -78,7 +78,7 @@ export class SecurityManager {
 
     await this.service.createRuleAndBindLambda(refreshTokensRuleName, tokensRefreshTime, refreshTokensLambdaARN);
 
-    return { message: 'Token refresh time changed successfully.' };
+    return { message: 'Tokens refresh time changed successfully.' };
   }
 
   async refreshTokens(iconikService: IconikService): Promise<{ message: string }> {
