@@ -1,4 +1,5 @@
 import { IconikParams } from '@workflowwin/iconik-api';
+import { APIGatewayAuthorizerResult } from 'aws-lambda';
 
 export interface IconikContext {
   appId: string;
@@ -23,3 +24,5 @@ export interface IconikEnhancedAuthContext extends IconikParams {
   ownerId?: string;
   ownerEmail?: string;
 }
+
+export type AuthorizerResponse = (APIGatewayAuthorizerResult & { context: IconikEnhancedAuthContext }) | undefined;
