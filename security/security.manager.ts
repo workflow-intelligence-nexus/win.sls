@@ -89,7 +89,7 @@ export class SecurityManager {
     }
 
     const newToken: string = await this.service.createNewAppToken(iconikService);
-    await this.service.updateTokensInWHandCA(iconikService, webHooks, customActions, newToken);
+    await this.service.refreshTokensInWHandCA(iconikService, webHooks, customActions, newToken);
 
     return { message: 'Refresh tokens successfully!' };
   }

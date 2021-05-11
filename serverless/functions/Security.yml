@@ -47,17 +47,6 @@ refreshTokens:
   tags:
     client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
   timeout: 28
-  events:
-    - http:
-        path: api/security/refresh-tokens
-        method: get
-        integration: lambda
-        cors: true
-        response:
-          headers:
-            Access-Control-Allow-Origin: "'*'"
-            Content-Type: "'application/json'"
-          template: $input.json('$')
 
 invalidateTokens:
   handler: security/handler.invalidateTokens
@@ -65,14 +54,3 @@ invalidateTokens:
   tags:
     client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
   timeout: 28
-  events:
-    - http:
-        path: api/security/invalidate-tokens
-        method: get
-        integration: lambda
-        cors: true
-        response:
-          headers:
-            Access-Control-Allow-Origin: "'*'"
-            Content-Type: "'application/json'"
-          template: $input.json('$')

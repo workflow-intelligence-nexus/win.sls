@@ -68,42 +68,44 @@ export class SecurityService {
     return tokens;
   }
 
-  public async updateTokensInWHandCA(
+  public async refreshTokensInWHandCA(
     iconikService: IconikService,
     webHooks: WebhookResponseSchema[],
     customActions: CustomActionSchema[],
     token: string
   ): Promise<void> {
-    await Promise.all(
-      webHooks.map(async ({ event_type, url, id, status, headers }) => {
-        try {
-          await iconikService.notifications.updateWebhook(id, {
-            url,
-            event_type,
-            status,
-            headers: { ...headers, 'auth-token': token },
-          });
-        } catch (error) {
-          console.log('updateWebhook', error);
-        }
-      })
-    );
+    const refreshTokensInCAs = customActions.map(async (CA) => await this.refreshTokenInCA(token, CA, iconikService));
+    const refreshTokensInWHs = webHooks.map(async (WH) => await this.refreshTokenInWH(token, WH, iconikService));
 
-    await Promise.all(
-      customActions.map(async (CA) => {
-        try {
-          const { context, id, title, url } = CA;
-          await iconikService.assets.updateCustomAction(context, id!, {
-            context,
-            title,
-            url,
-            headers: { ...CA?.headers, 'auth-token': token },
-          });
-        } catch (error) {
-          console.log('updateCustomAction', error);
-        }
-      })
-    );
+    await Promise.all([refreshTokensInCAs, refreshTokensInWHs]);
+  }
+
+  private async refreshTokenInCA(token: string, CA: CustomActionSchema, iconikService: IconikService) {
+    try {
+      const { context, id, title, url } = CA;
+      await iconikService.assets.updateCustomAction(context, id!, {
+        context,
+        title,
+        url,
+        headers: { ...CA?.headers, 'auth-token': token },
+      });
+    } catch (error) {
+      console.log('updateCustomAction: ', error);
+    }
+  }
+
+  private async refreshTokenInWH(token: string, WH: WebhookResponseSchema, iconikService: IconikService) {
+    const { event_type, url, id, status, headers } = WH;
+    try {
+      await iconikService.notifications.updateWebhook(id, {
+        url,
+        event_type,
+        status,
+        headers: { ...headers, 'auth-token': token },
+      });
+    } catch (error) {
+      console.log('updateWebhook: ', error);
+    }
   }
 
   public async createRuleAndBindLambda(
