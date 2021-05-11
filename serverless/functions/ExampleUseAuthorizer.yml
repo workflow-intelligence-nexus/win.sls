@@ -6,6 +6,8 @@ exampleInitialization:
   tags:
     client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
   timeout: 28
+  environment:
+    EXAMPLE_OF_USE_AUTHORIZER_URL: ${self:custom.customActionsURLs.ExampleOfUseAuthorizer.${opt:stage, self:provider.stage}}
   events:
     - http:
         path: api/examples/initialization

@@ -16,12 +16,11 @@ export const iconikAuthorizer: Handler<
     const callerId: string = event['headers']['User-Id'];
     const authToken: string = event['headers']['auth-token'];
 
-    const iconikParams: IconikParams = {
-      authToken,
-      iconikUrl: getEnv('ICONIK_URL'),
-      appId: getEnv('ICONIK_APP_ID'),
-      systemDomainId: getEnv('ICONIK_DOMAIN_ID'),
-    };
+    const iconikUrl = getEnv('ICONIK_URL');
+    const appId = getEnv('ICONIK_APP_ID');
+    const systemDomainId = getEnv('ICONIK_DOMAIN_ID');
+
+    const iconikParams: IconikParams = { authToken, iconikUrl, appId, systemDomainId };
 
     const { caller, appOwner }: IconikContext = await getCallerAndOwner(iconikParams, callerId);
     const context: IconikEnhancedAuthContext = {

@@ -1,4 +1,4 @@
-service: template-sls
+service: template-win-sls
 
 provider:
   name: aws
@@ -149,26 +149,46 @@ custom:
       test: 'Jobs-test'
       prod: 'Jobs'
   customActionsURLs:
-    GetMediaInfo:
-      local: '${file(env.yml):local.OFFLINE_API_BASE_URL}api/media-info'
+    ChangeRefreshTokenPeriod:
+      local: '${file(env.yml):local.OFFLINE_API_BASE_URL}api/security/change-refresh-token-period'
       dev: !Sub
         - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/${path}'
         - gatewayId: !Ref ApiGatewayRestApi
           region: !Ref AWS::Region
           suffix: !Ref AWS::URLSuffix
-          path: 'api/media-info'
+          path: 'api/security/change-refresh-token-period'
       test: !Sub
         - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/${path}'
         - gatewayId: !Ref ApiGatewayRestApi
           region: !Ref AWS::Region
           suffix: !Ref AWS::URLSuffix
-          path: 'api/media-info'
+          path: 'api/security/change-refresh-token-period'
       prod: !Sub
         - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/${path}'
         - gatewayId: !Ref ApiGatewayRestApi
           region: !Ref AWS::Region
           suffix: !Ref AWS::URLSuffix
-          path: 'api/media-info'
+          path: 'api/security/change-refresh-token-period'
+    ExampleOfUseAuthorizer:
+      local: '${file(env.yml):local.OFFLINE_API_BASE_URL}api/examples/use-authorizer'
+      dev: !Sub
+        - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/${path}'
+        - gatewayId: !Ref ApiGatewayRestApi
+          region: !Ref AWS::Region
+          suffix: !Ref AWS::URLSuffix
+          path: 'api/examples/use-authorizer'
+      test: !Sub
+        - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/${path}'
+        - gatewayId: !Ref ApiGatewayRestApi
+          region: !Ref AWS::Region
+          suffix: !Ref AWS::URLSuffix
+          path: 'api/examples/use-authorizer'
+      prod: !Sub
+        - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/${path}'
+        - gatewayId: !Ref ApiGatewayRestApi
+          region: !Ref AWS::Region
+          suffix: !Ref AWS::URLSuffix
+          path: 'api/examples/use-authorizer'
   dirconfig:
     quiet: true
   webpack:

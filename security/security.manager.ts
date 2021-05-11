@@ -2,7 +2,6 @@ import { HttpBadRequestError } from '@errors/http';
 import { getEnv } from '@helper/environment';
 import { log } from '@helper/logger';
 import { IconikTokenInterface, IconikTokenModel, IconikTokenSchema } from '@models/DynamoDB/iconik-token.model';
-import { CloudFormationService } from '@services/cloud-formation.service';
 import { IconikService } from '@workflowwin/iconik-api';
 import { MetadataFieldSchema } from '@workflowwin/iconik-api/dist/src/metadata/metadata-methods';
 import { CustomActionSchema } from '@workflowwin/iconik-api/src/assets/assets-methods';
@@ -24,9 +23,9 @@ export class SecurityManager {
     this.service = new SecurityService();
   }
 
-  async initialization(iconikService: IconikService, cloudFormation: CloudFormationService) {
+  async initialization(iconikService: IconikService) {
     try {
-      const apiUrl = await cloudFormation.getServiceEndpoint();
+      const apiUrl = getEnv('CHANGE_REFRESH_TOKEN_PERIOD_CA_URL');
 
       const field: MetadataFieldSchema = await iconikService.metadata.createMetadataField(refreshHoursField);
       const view = await iconikService.metadata.createMetadataView({
@@ -40,7 +39,7 @@ export class SecurityManager {
         context: 'NONE',
         type: 'POST',
         title: 'Change Refresh Token Period',
-        url: `${apiUrl}/api/security/change-refresh-token-period`,
+        url: apiUrl,
         metadata_view: view.id,
       });
 

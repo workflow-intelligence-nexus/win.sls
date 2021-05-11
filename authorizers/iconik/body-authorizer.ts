@@ -25,24 +25,21 @@ type Payload = CustomActionPayload & { auth_token?: string };
 
 export async function authorizeWithIconikCustomAction(customActionBody: Payload): Promise<IconikContext> {
   const { user_id: callerId, system_domain_id: systemDomainId, auth_token: authToken } = customActionBody;
+  const iconikUrl = getEnv('ICONIK_URL');
+  const appId = getEnv('ICONIK_APP_ID');
+  const requiredIconikDomainId = getEnv('ICONIK_DOMAIN_ID');
 
   if (!authToken) {
     log('No auth token');
     throw new HttpUnauthorizedError('No auth token');
   }
 
-  const requiredIconikDomainId = getEnv('ICONIK_DOMAIN_ID');
   if (requiredIconikDomainId !== systemDomainId) {
     log('Wrong domain id');
     throw new HttpUnauthorizedError('Wrong domain id');
   }
 
-  const iconikParams: IconikParams = {
-    authToken,
-    systemDomainId,
-    iconikUrl: getEnv('ICONIK_URL'),
-    appId: getEnv('ICONIK_APP_ID'),
-  };
+  const iconikParams: IconikParams = { authToken, iconikUrl, appId, systemDomainId };
 
   return await getCallerAndOwner(iconikParams, callerId);
 }
