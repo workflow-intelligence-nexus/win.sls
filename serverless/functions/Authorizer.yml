@@ -1,4 +1,4 @@
-IconikAuthorizer:
+iconikAuthorizer:
   handler: authorizers/iconik/headers-authorizer.iconikAuthorizer
   timeout: 29
   tags:

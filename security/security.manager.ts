@@ -1,6 +1,5 @@
 import { HttpBadRequestError } from '@errors/http';
 import { getEnv } from '@helper/environment';
-import { log } from '@helper/logger';
 import { IconikTokenInterface, IconikTokenModel, IconikTokenSchema } from '@models/DynamoDB/iconik-token.model';
 import { IconikService } from '@workflowwin/iconik-api';
 import { MetadataFieldSchema } from '@workflowwin/iconik-api/dist/src/metadata/metadata-methods';
@@ -51,7 +50,7 @@ export class SecurityManager {
       );
       return { message: 'Security Workflow successfully initialize.' };
     } catch (error) {
-      log('initialize error', error);
+      console.log('initialize error', error);
       throw new HttpBadRequestError('Cannot initialize Security. Connect WIN Support team.');
     }
   }
@@ -73,6 +72,9 @@ export class SecurityManager {
       invalidateTokensLambdaARN
     );
 
+    /** We have to create refreshTokensRule
+     *  after invalidateTokensRule for token
+     *  replacement to work correctly */
     await new Promise((res) => setTimeout(() => res(), 5000));
 
     await this.service.createRuleAndBindLambda(refreshTokensRuleName, tokensRefreshTime, refreshTokensLambdaARN);
@@ -87,7 +89,7 @@ export class SecurityManager {
     const invalidationTokens: IconikTokenSchema[] = this.service.getTokensFromWHandCA(webHooks, customActions);
     if (invalidationTokens?.length) {
       const batchPut = await IconikTokenModel.batchPut(invalidationTokens);
-      log('batchPut', batchPut);
+      console.log('batchPut', batchPut);
     }
 
     const newToken: string = await this.service.createNewAppToken(iconikService);

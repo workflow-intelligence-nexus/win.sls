@@ -1,5 +1,4 @@
 import { getEnv } from '@helper/environment';
-import { log } from '@helper/logger';
 import { IconikTokenInterface, IconikTokenModel, IconikTokenSchema } from '@models/DynamoDB/iconik-token.model';
 import { IconikService } from '@workflowwin/iconik-api';
 import { CustomActionSchema } from '@workflowwin/iconik-api/dist/src/assets/assets-methods';
@@ -76,7 +75,7 @@ export class SecurityService {
             headers: { ...headers, 'auth-token': token },
           });
         } catch (error) {
-          log('updateWebhook', error);
+          console.log('updateWebhook', error);
         }
       })
     );
@@ -92,7 +91,7 @@ export class SecurityService {
             headers: { ...CA?.headers, 'auth-token': token },
           });
         } catch (error) {
-          log('updateCustomAction', error);
+          console.log('updateCustomAction', error);
         }
       })
     );
@@ -147,7 +146,7 @@ export class SecurityService {
     try {
       await iconikService.auth.deleteToken(getEnv('ICONIK_APP_ID'), token);
     } catch (error) {
-      log('invalidateIconikToken: ', error);
+      console.log('invalidateIconikToken: ', error);
     }
   }
 
@@ -167,7 +166,7 @@ export class SecurityService {
         })
         .promise();
     } catch (error) {
-      log('addFunctionInvokePermissionForRule: ', error);
+      console.log('addFunctionInvokePermissionForRule: ', error);
     }
   }
 
@@ -175,7 +174,7 @@ export class SecurityService {
     try {
       return await this.cloudWatchEvents.describeRule({ Name: name }).promise();
     } catch (error) {
-      log('getCloudWatchRule: ', error);
+      console.log('getCloudWatchRule: ', error);
     }
   }
 

@@ -1,8 +1,8 @@
 # ================== Security =====================
 
-initialization:
+securityInitialization:
   handler: security/handler.initialization
-  description: 'create CA for change refresh token period'
+  description: 'Create CA for change refresh token period'
   tags:
     client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
   timeout: 28
@@ -43,7 +43,7 @@ changeRefreshTokenPeriod:
 
 refreshTokens:
   handler: security/handler.refreshTokens
-  description: 'refresh tokens in CA and WH every N hours'
+  description: 'Refresh tokens in CA and WH every N hours'
   tags:
     client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
   timeout: 28
@@ -61,7 +61,7 @@ refreshTokens:
 
 invalidateTokens:
   handler: security/handler.invalidateTokens
-  description: 'invalidate tokens in CA and WH'
+  description: 'Invalidate tokens in CA and WH'
   tags:
     client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
   timeout: 28
