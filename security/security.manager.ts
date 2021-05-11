@@ -34,7 +34,7 @@ export class SecurityManager {
       });
       await iconikService.metadata.addCategoryToView(view.id, 'custom_actions');
 
-      const customAction = await iconikService.assets.createCustomAction('NONE', {
+      const customAction: CustomActionSchema = await iconikService.assets.createCustomAction('NONE', {
         context: 'NONE',
         type: 'POST',
         title: 'Change Refresh Token Period',
@@ -42,12 +42,8 @@ export class SecurityManager {
         metadata_view: view.id,
       });
 
-      const { groups_acl } = await iconikService.acls.getAclByObjectId(customAction.id!, 'custom_actions');
-      await Promise.all(
-        groups_acl.map(
-          async (acl) => await iconikService.acls.removeGroupAcl(customAction.id!, acl.group_id, 'custom_actions')
-        )
-      );
+      await this.service.removeAclFromCA(iconikService, customAction);
+
       return { message: 'Security Workflow successfully initialize.' };
     } catch (error) {
       console.log('initialize error', error);

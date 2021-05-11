@@ -25,6 +25,15 @@ export class SecurityService {
     AWS.config.update({ region: getEnv('REGION') });
   }
 
+  public async removeAclFromCA(iconikService: IconikService, customAction: CustomActionSchema): Promise<void> {
+    const { groups_acl } = await iconikService.acls.getAclByObjectId(customAction.id!, 'custom_actions');
+    await Promise.all(
+      groups_acl.map(
+        async (acl) => await iconikService.acls.removeGroupAcl(customAction.id!, acl.group_id, 'custom_actions')
+      )
+    );
+  }
+
   public async getCustomActions(iconikService: IconikService): Promise<CustomActionSchema[]> {
     return (await iconikService.assets.getCustomActions()).objects.filter((CA) => CA.type !== 'OPEN');
   }
