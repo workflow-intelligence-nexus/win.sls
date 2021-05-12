@@ -1,5 +1,4 @@
 import { getEnv } from '@helper/environment';
-import { errorHandler } from '@helper/error-handler';
 import { log } from '@helper/logger';
 import { IconikParams } from '@workflowwin/iconik-api';
 import { APIGatewayAuthorizerEvent, Handler } from 'aws-lambda';
@@ -19,17 +18,15 @@ export const iconikAuthorizer: Handler<APIGatewayAuthorizerEvent, AuthorizerResp
 
     const iconikParams: IconikParams = { authToken, iconikUrl, appId, systemDomainId };
 
-    const { caller, appOwner }: IconikContext = await getCallerAndOwner(iconikParams, callerId);
+    const { appOwner }: IconikContext = await getCallerAndOwner(iconikParams, callerId);
     const context: IconikEnhancedAuthContext = {
       ...iconikParams,
-      callerId: caller?.id,
-      callerEmail: caller?.email,
       ownerId: appOwner?.id,
       ownerEmail: appOwner?.email,
     };
 
-    return generatePolicy<IconikEnhancedAuthContext | any>(`user|${caller?.id}`, 'Allow', event.methodArn, context);
+    return generatePolicy<IconikEnhancedAuthContext | any>(`user|${appOwner?.id}`, 'Allow', event.methodArn, context);
   } catch (error) {
-    errorHandler(error);
+    log('[Iconik Authorizer] error: ', error);
   }
 };

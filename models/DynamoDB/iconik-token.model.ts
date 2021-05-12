@@ -2,7 +2,7 @@ import { getEnv, isStage } from '@helper/environment';
 import { dynamoose } from '@services/dynamoose';
 import { Document } from 'dynamoose/dist/Document';
 
-export interface IconikTokenInterface {
+export interface IconikToken {
   token: string;
   createdAt: Date;
   updatedAt: Date;

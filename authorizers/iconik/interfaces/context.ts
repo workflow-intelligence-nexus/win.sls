@@ -19,8 +19,6 @@ export interface IconikContext {
 export interface IconikEnhancedAuthContext extends IconikParams {
   principalId?: string;
   integrationLatency?: string;
-  callerId?: string;
-  callerEmail?: string;
   ownerId?: string;
   ownerEmail?: string;
 }

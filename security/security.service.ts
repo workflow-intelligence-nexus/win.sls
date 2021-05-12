@@ -1,5 +1,5 @@
 import { getEnv } from '@helper/environment';
-import { IconikTokenInterface, IconikTokenModel, IconikTokenSchema } from '@models/DynamoDB/iconik-token.model';
+import { IconikToken, IconikTokenModel, IconikTokenSchema } from '@models/DynamoDB/iconik-token.model';
 import { IconikService } from '@workflowwin/iconik-api';
 import { CustomActionSchema } from '@workflowwin/iconik-api/dist/src/assets/assets-methods';
 import { WebhookResponseSchema } from '@workflowwin/iconik-api/src/notifications/notifications-methods';
@@ -139,8 +139,8 @@ export class SecurityService {
     });
   }
 
-  public async getTokensFromDynamoDB(): Promise<ScanResponse<IconikTokenInterface>> {
-    return (await IconikTokenModel.scan().exec()) as ScanResponse<any>;
+  public async getTokensFromDynamoDB(): Promise<ScanResponse<IconikToken>> {
+    return (await IconikTokenModel.scan().exec()) as ScanResponse<IconikToken>;
   }
 
   public isInvalidateIconikToken(dateOfCreation: Date) {

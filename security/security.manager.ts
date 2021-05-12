@@ -1,6 +1,6 @@
 import { HttpBadRequestError } from '@errors/http';
 import { getEnv } from '@helper/environment';
-import { IconikTokenInterface, IconikTokenModel, IconikTokenSchema } from '@models/DynamoDB/iconik-token.model';
+import { IconikToken, IconikTokenModel, IconikTokenSchema } from '@models/DynamoDB/iconik-token.model';
 import { IconikService } from '@workflowwin/iconik-api';
 import { MetadataFieldSchema } from '@workflowwin/iconik-api/dist/src/metadata/metadata-methods';
 import { CustomActionSchema } from '@workflowwin/iconik-api/src/assets/assets-methods';
@@ -95,7 +95,7 @@ export class SecurityManager {
   }
 
   async invalidateTokens(iconikService: IconikService): Promise<{ message: string }> {
-    const invalidationTokens: ScanResponse<IconikTokenInterface> = await this.service.getTokensFromDynamoDB();
+    const invalidationTokens: ScanResponse<IconikToken> = await this.service.getTokensFromDynamoDB();
 
     await Promise.all(
       invalidationTokens.map(async ({ token, createdAt }) => {
