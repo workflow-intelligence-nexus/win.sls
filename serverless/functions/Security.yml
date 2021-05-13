@@ -7,7 +7,7 @@ securityInitialization:
     client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
   timeout: 28
   environment:
-    CHANGE_REFRESH_TOKEN_PERIOD_CA_URL: ${self:custom.customActionsURLs.ChangeRefreshTokenPeriod.${opt:stage, self:provider.stage}}
+    API_BASE_URL: ${self:custom.apiBaseURL.${opt:stage, self:provider.stage}}
   events:
     - http:
         path: api/security/initialization

@@ -24,7 +24,9 @@ export class SecurityManager {
 
   async initialization(iconikService: IconikService) {
     try {
-      const apiUrl = getEnv('CHANGE_REFRESH_TOKEN_PERIOD_CA_URL');
+      const path = 'api/security/change-refresh-token-period';
+      const baseUrl = getEnv('API_BASE_URL');
+      const apiUrl = `${baseUrl}${path}`;
 
       const field: MetadataFieldSchema = await iconikService.metadata.createMetadataField(refreshHoursField);
       const view = await iconikService.metadata.createMetadataView({
