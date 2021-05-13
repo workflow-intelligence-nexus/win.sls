@@ -1,9 +1,7 @@
 import { IconikParams } from '@workflowwin/iconik-api';
 import { APIGatewayAuthorizerResult } from 'aws-lambda';
 
-export interface IconikContext {
-  appId: string;
-  systemDomainId: string;
+export interface IconikContext extends IconikParams {
   caller: {
     id: string;
     email: string;
@@ -12,8 +10,6 @@ export interface IconikContext {
     id: string;
     email: string;
   };
-  authToken: string;
-  iconikUrl: string;
 }
 
 export interface IconikEnhancedAuthContext extends IconikParams {

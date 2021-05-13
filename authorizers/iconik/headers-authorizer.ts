@@ -1,4 +1,5 @@
 import { getEnv } from '@helper/environment';
+import { errorHandler } from '@helper/error-handler';
 import { log } from '@helper/logger';
 import { IconikParams } from '@workflowwin/iconik-api';
 import { APIGatewayAuthorizerEvent, Handler } from 'aws-lambda';
@@ -27,6 +28,6 @@ export const iconikAuthorizer: Handler<APIGatewayAuthorizerEvent, AuthorizerResp
 
     return generatePolicy<IconikEnhancedAuthContext | any>(`user|${appOwner?.id}`, 'Allow', event.methodArn, context);
   } catch (error) {
-    log('[Iconik Authorizer] error: ', error);
+    errorHandler(error);
   }
 };
