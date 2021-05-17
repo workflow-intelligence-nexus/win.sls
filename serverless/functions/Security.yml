@@ -8,6 +8,10 @@ securityInitialization:
   timeout: 28
   environment:
     API_BASE_URL: ${self:custom.apiBaseURL.${opt:stage, self:provider.stage}}
+    CHANGE_REFRESH_TOKEN_PERIOD_CA_URL: !Sub
+      - '${apiBaseUrl}${path}'
+      - apiBaseUrl: ${self:custom.apiBaseURL.${opt:stage, self:provider.stage}}
+        path: api/security/change-refresh-token-period
   events:
     - http:
         path: api/security/initialization

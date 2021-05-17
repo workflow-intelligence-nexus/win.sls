@@ -5,9 +5,7 @@ import { IconikService } from '@workflowwin/iconik-api';
 export class ExampleOfUseAuthorizerManager {
   public async initialization(iconikService: IconikService): Promise<{ message: string }> {
     try {
-      const path = 'api/examples/use-authorizer';
-      const baseUrl = getEnv('API_BASE_URL');
-      const apiUrl = `${baseUrl}${path}`;
+      const apiUrl = getEnv('EXAMPLE_OF_USE_AUTHORIZER_CA_URL');
 
       await iconikService.assets.createCustomAction('NONE', {
         context: 'NONE',
