@@ -140,6 +140,25 @@ Follow these steps:
 - After successful deployment you will see the API URLs. Copy the URLs that ends on `/initialization`, post them to
   the browser URL input and click enter. They will create all needed stuff in your iconik account.
 
+5. Iconik Security
+
+For developer:
+
+- You can now use `iconikAuthorizer` to keep your `CAs` and `WHs` safe.
+  In order for the iconikAuthorizer to have something to check,
+  you need to initialize Security Workflow(`/api/security/initialization`),
+  then call CA `Change Refresh Token Period` and set the time(hours) at which
+  tokens inside CAs and WHs will be refreshed.
+- There is also `INVALIDATE_TOKEN_DELAY_HOURS` (the timeout after which the tokens will be invalidated),
+  if your code must run for a long time and needs a token, then
+  the `INVALIDATE_TOKEN_DELAY_HOURS` value should be large so as not to invalidate
+  the token in the middle of the path
+
+For admin:
+
+- Admin can use only CA `Change Refresh Token Period`,
+  which change token refresh time(hours)
+
 ## The project contains:
 
 - The Media Info feature that uses mediainfo binary file and returns media info by url
