@@ -10,8 +10,8 @@ import { SecurityService } from './security.service';
 
 const refreshHoursField: MetadataFieldSchema = {
   field_type: 'integer',
-  name: 'win_RefreshHours',
-  label: 'Refresh Hours',
+  name: 'Set Token Refresh Time',
+  description: 'WIN Automation View',
   required: true,
 };
 
@@ -47,7 +47,7 @@ export class SecurityManager {
       return { message: 'Security Workflow successfully initialize.' };
     } catch (error) {
       console.log('initialize error', error);
-      throw new HttpBadRequestError('Cannot initialize Security. Connect WIN Support team.');
+      throw new HttpBadRequestError('Cannot initialize Security Workflow. Connect WIN Support team.');
     }
   }
 
@@ -60,7 +60,7 @@ export class SecurityManager {
     const tokensRefreshTime = parseFloat(refreshHours) * 60;
 
     const invalidateTokensRuleName = 'invalidate-tokens-event';
-    const tokensInvalidateTime = tokensRefreshTime + parseFloat(getEnv('REFRESH_TOKEN_HOURS')) * 60;
+    const tokensInvalidateTime = tokensRefreshTime + parseFloat(getEnv('INVALIDATE_TOKEN_DELAY_HOURS')) * 60;
 
     await this.service.createRuleAndBindLambda(
       invalidateTokensRuleName,

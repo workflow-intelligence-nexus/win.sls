@@ -145,7 +145,7 @@ export class SecurityService {
 
   public isInvalidateIconikToken(dateOfCreation: Date) {
     const hourInMilliseconds = 3600000;
-    const refreshTokenMilliseconds: number = parseFloat(getEnv('REFRESH_TOKEN_HOURS')) * hourInMilliseconds;
+    const refreshTokenMilliseconds: number = parseFloat(getEnv('INVALIDATE_TOKEN_DELAY_HOURS')) * hourInMilliseconds;
 
     const nowTime = new Date().getTime();
     const invalidationTime = dateOfCreation.getTime() + refreshTokenMilliseconds;
