@@ -10,8 +10,8 @@ import { SecurityService } from './security.service';
 
 const refreshHoursField: MetadataFieldSchema = {
   field_type: 'integer',
-  name: 'Set Token Refresh Time',
-  description: 'WIN Automation View',
+  name: 'win_RefreshHours',
+  label: 'Refresh Hours',
   required: true,
 };
 
@@ -28,8 +28,8 @@ export class SecurityManager {
 
       const field: MetadataFieldSchema = await iconikService.metadata.createMetadataField(refreshHoursField);
       const view = await iconikService.metadata.createMetadataView({
-        name: 'win_RefreshHoursView',
-        label: 'Set Token Refresh Time',
+        name: 'Set Token Refresh Time',
+        description: 'WIN Automation View',
         view_fields: [field],
       });
       await iconikService.metadata.addCategoryToView(view.id, 'custom_actions');
