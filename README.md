@@ -171,6 +171,9 @@ For developers:
 - Examples of models for sequelize library
 - Examples of services for working with AWS resources
 - Simple CircleCI configuration
+- Iconik Security Workflow
+- Iconik Authorizers
+- Example of use Iconik Authorizer
 
 ## iconik Resources
 
@@ -210,6 +213,20 @@ For developers:
 
 - **Custom Action Name 2** `api/custom-action-url-2` - It starts transcription process
 
+### Iconik Security Workflow
+
+#### Metadata Views
+
+- **Set Token Refresh Time** - Metadata for the Custom Action for change token refresh time
+  Fields:
+  - win_RefreshHoursView - token refresh time(in hours)
+
+#### Custom Actions
+
+- **Change Refresh Token Period** `api/security/initialization` - Creates 2 events:
+  the first replaces the tokens in CAs and WHs every N hours, the second invalidate old tokens
+  every N+INVALIDATE_TOKEN_DELAY_HOURS hours
+
 ## Project structure
 
 - .circleci - Configuration for CI/CD
@@ -222,7 +239,16 @@ For developers:
     - feature_name.service.ts - It's the feature service. Its methods should implement one of the main steps of some
       feature's functionality
     - feature_name.interface.ts - This file should contain all required interfaces for the feature
+- security - Feature for updating tokens in CAs and WHs
+  - handler.ts
+  - security.manager.ts
+  - security.service.ts
 - authorizers - lambda authorizers(custom authorizers) or authorizers for iconik requests
+  - iconik
+    - body-authorizer.ts - custom authorizer for Iconik
+    - headers-authorizer.ts - serverless authorizer for Iconik
+    - helper.ts - contains general methods for Iconik authorizers
+    - interfaces - contains interfaces for Iconik authorizes
 - bin - Executable files (third party libraries that can be used inside a Lambda function)
 - helper - All auxiliary code
   - app-errors.ts - This file contains the class that derives from Node.js Error class. It should be used for providing
