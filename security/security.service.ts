@@ -119,8 +119,8 @@ export class SecurityService {
       State: 'ENABLED',
     };
 
-    const isRule = await this.getCloudWatchRule(ruleName);
-    if (isRule) {
+    const rule = await this.getCloudWatchRule(ruleName);
+    if (rule) {
       return await this.putCloudWatchRule(params);
     }
 
