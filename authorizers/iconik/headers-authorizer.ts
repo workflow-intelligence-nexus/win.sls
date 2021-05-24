@@ -26,7 +26,7 @@ export const iconikAuthorizer: Handler<APIGatewayAuthorizerEvent, AuthorizerResp
       ownerEmail: appOwner?.email,
     };
 
-    return generatePolicy<IconikEnhancedAuthContext | any>(`user|${appOwner?.id}`, 'Allow', event.methodArn, context);
+    return generatePolicy<IconikEnhancedAuthContext | any>(`user|${appOwner?.id}`, 'Allow', '*', context);
   } catch (error) {
     errorHandler(error);
   }
