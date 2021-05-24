@@ -3,7 +3,7 @@ import { IconikParams } from '@workflowwin/iconik-api';
 import { CustomActionPayload } from '@workflowwin/iconik-api/dist/src/assets/assets-methods';
 import { getEnv } from '@helper/environment';
 import { log } from '@helper/logger';
-import { getCallerAndOwner } from './helper';
+import { getIconikContext } from './helper';
 import { IconikContext } from './interfaces/context';
 
 type Payload = CustomActionPayload & { auth_token?: string };
@@ -41,5 +41,5 @@ export async function authorizeWithIconikCustomAction(customActionBody: Payload)
 
   const iconikParams: IconikParams = { authToken, iconikUrl, appId, systemDomainId };
 
-  return await getCallerAndOwner(iconikParams, callerId);
+  return await getIconikContext(iconikParams, callerId);
 }

@@ -4,7 +4,6 @@ import { IconikToken, IconikTokenModel, IconikTokenSchema } from '@models/Dynamo
 import { IconikService } from '@workflowwin/iconik-api';
 import { MetadataFieldSchema } from '@workflowwin/iconik-api/dist/src/metadata/metadata-methods';
 import { CustomActionSchema } from '@workflowwin/iconik-api/src/assets/assets-methods';
-import { WebhookResponseSchema } from '@workflowwin/iconik-api/src/notifications/notifications-methods';
 import { ScanResponse } from 'dynamoose/dist/DocumentRetriever';
 import { SecurityService } from './security.service';
 

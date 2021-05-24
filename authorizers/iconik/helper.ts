@@ -3,7 +3,7 @@ import { IconikService } from '@workflowwin/iconik-api';
 import { IconikParams } from '@workflowwin/iconik-api/src/index';
 import { IconikContext } from './interfaces/context';
 
-export async function getCallerAndOwner(iconikParams: IconikParams, callerId: string): Promise<IconikContext> {
+export async function getIconikContext(iconikParams: IconikParams, callerId: string): Promise<IconikContext> {
   const iconik = new IconikService(iconikParams);
 
   const context: Partial<IconikContext> = {
