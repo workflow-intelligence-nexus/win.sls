@@ -1,0 +1,59 @@
+# ================== Security =====================
+
+securityInitialization:
+  handler: security/handler.initialization
+  description: 'Create CA for change refresh token period'
+  tags:
+    client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
+  timeout: 28
+  environment:
+    CHANGE_REFRESH_TOKEN_PERIOD_CA_URL: !Sub
+      - '${apiBaseUrl}${path}'
+      - apiBaseUrl: ${self:custom.apiBaseURL.${opt:stage, self:provider.stage}}
+        path: api/security/change-refresh-token-period
+  events:
+    - http:
+        path: api/security/initialization
+        method: get
+        integration: lambda
+        cors: true
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+
+changeRefreshTokenPeriod:
+  handler: security/handler.changeRefreshTokenPeriod
+  description: 'CA for change refresh token period'
+  tags:
+    client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
+  timeout: 28
+  environment:
+    REFRESH_TOKEN_LAMBDA_ARN: !GetAtt RefreshTokensLambdaFunction.Arn
+    INVALIDATE_TOKENS_LAMBDA_ARN: !GetAtt InvalidateTokensLambdaFunction.Arn
+  events:
+    - http:
+        path: api/security/change-refresh-token-period
+        method: post
+        integration: lambda
+        cors: true
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+
+refreshTokens:
+  handler: security/handler.refreshTokens
+  description: 'Refresh tokens in CA and WH every N hours'
+  tags:
+    client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
+  timeout: 28
+
+invalidateTokens:
+  handler: security/handler.invalidateTokens
+  description: 'Invalidate tokens in CA and WH'
+  tags:
+    client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
+  timeout: 28

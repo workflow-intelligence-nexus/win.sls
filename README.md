@@ -140,6 +140,27 @@ Follow these steps:
 - After successful deployment you will see the API URLs. Copy the URLs that ends on `/initialization`, post them to
   the browser URL input and click enter. They will create all needed stuff in your iconik account.
 
+5. iconik Security Workflow - allows to rotate your tokens
+
+For admins:
+
+- After initializing all workflows, copy the URL that ends on `/api/security/initialization`,
+  post it to the browser URL input and click enter. It will create all
+  needed stuff in your iconik account.
+- You need to use CA `Change Refresh Token Period`, which starts iconik Security
+  Workflow and changes token refresh time (in hours). Recommended number is 24 hours
+
+For developers:
+
+- You can use `iconikAuthorizer` to keep your `CAs` and `WHs` Lambda function safe.
+  See the examples in the repository. In order to start using it,
+  you need to initialize iconik Security Workflow (`/api/security/initialization`),
+  then call CA `Change Refresh Token Period` and set the time (in hours) at which
+  tokens inside CAs and WHs will be refreshed.
+- There is also `INVALIDATE_TOKEN_DELAY_HOURS` (the timeout after which the tokens will be invalidated),
+  if your code must run for a long time and needs a token, then the `INVALIDATE_TOKEN_DELAY_HOURS`
+  value should be large so as not to invalidate the token in the middle of the performing workflow
+
 ## The project contains:
 
 - The Media Info feature that uses mediainfo binary file and returns media info by url
@@ -150,6 +171,9 @@ Follow these steps:
 - Examples of models for sequelize library
 - Examples of services for working with AWS resources
 - Simple CircleCI configuration
+- Iconik Security Workflow
+- Iconik Authorizers
+- Example of use Iconik Authorizer
 
 ## iconik Resources
 
@@ -189,6 +213,20 @@ Follow these steps:
 
 - **Custom Action Name 2** `api/custom-action-url-2` - It starts transcription process
 
+### Iconik Security Workflow
+
+#### Metadata Views
+
+- **Set Token Refresh Time** - Metadata for the Custom Action for change token refresh time
+  Fields:
+  - win_RefreshHoursView - token refresh time(in hours)
+
+#### Custom Actions
+
+- **Change Refresh Token Period** `api/security/initialization` - Creates 2 events:
+  the first replaces the tokens in CAs and WHs every N hours, the second invalidate old tokens
+  every N+INVALIDATE_TOKEN_DELAY_HOURS hours
+
 ## Project structure
 
 - .circleci - Configuration for CI/CD
@@ -201,7 +239,16 @@ Follow these steps:
     - feature_name.service.ts - It's the feature service. Its methods should implement one of the main steps of some
       feature's functionality
     - feature_name.interface.ts - This file should contain all required interfaces for the feature
+- security - Feature for updating tokens in CAs and WHs
+  - handler.ts
+  - security.manager.ts
+  - security.service.ts
 - authorizers - lambda authorizers(custom authorizers) or authorizers for iconik requests
+  - iconik
+    - body-authorizer.ts - custom authorizer for Iconik
+    - headers-authorizer.ts - serverless authorizer for Iconik
+    - helper.ts - contains general methods for Iconik authorizers
+    - interfaces - contains interfaces for Iconik authorizes
 - bin - Executable files (third party libraries that can be used inside a Lambda function)
 - helper - All auxiliary code
   - app-errors.ts - This file contains the class that derives from Node.js Error class. It should be used for providing

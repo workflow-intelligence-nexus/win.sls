@@ -1,4 +1,16 @@
-#Resources:
+Resources:
+  IconikTokensTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: token
+          AttributeType: S
+      KeySchema:
+        - AttributeName: token
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      TableName: ${self:custom.tablesNames.IconikTokensTable.${opt:stage, self:provider.stage}}
 #  UsersTable:
 #    Type: AWS::DynamoDB::Table
 #    DeletionPolicy: Retain

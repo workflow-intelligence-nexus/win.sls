@@ -1,0 +1,47 @@
+# ================== Example Of Use Authorizer =====================
+
+exampleInitialization:
+  handler: api/example-of-use-authorizer/handler.exampleInitialization
+  description: 'Example create CA and WH'
+  tags:
+    client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
+  timeout: 28
+  environment:
+    EXAMPLE_OF_USE_AUTHORIZER_CA_URL: !Sub
+      - '${apiBaseUrl}${path}'
+      - apiBaseUrl: ${self:custom.apiBaseURL.${opt:stage, self:provider.stage}}
+        path: api/examples/use-authorizer
+  events:
+    - http:
+        path: api/examples/initialization
+        method: get
+        integration: lambda
+        cors: true
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+
+exampleOfUseAuthorizer:
+  handler: api/example-of-use-authorizer/handler.exampleOfUseAuthorizer
+  description: 'Example lambda with Iconik Authorizer'
+  tags:
+    client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
+  timeout: 28
+  events:
+    - http:
+        path: api/examples/use-authorizer
+        method: post
+        integration: lambda
+        cors: true
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+        authorizer:
+          name: iconikAuthorizer
+          resultTtlInSeconds: 0
+          type: request
+          identitySource: method.request.header.auth-token, method.request.header.User-Id

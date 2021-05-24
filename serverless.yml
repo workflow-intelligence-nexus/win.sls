@@ -5,71 +5,75 @@ provider:
   runtime: nodejs12.x
   environment:
     STAGE: ${opt:stage, self:provider.stage}
+    ICONIK_TOKENS_TABLE_NAME: ${self:custom.tablesNames.IconikTokensTable.${opt:stage, self:provider.stage}}
     USERS_TABLE_NAME: ${self:custom.tablesNames.UsersTable.${opt:stage, self:provider.stage}}
     JOBS_TABLE_NAME: ${self:custom.tablesNames.JobsTable.${opt:stage, self:provider.stage}}
   region: ${file(env.yml):${opt:stage, self:provider.stage}.REGION}
   profile: ${file(env.yml):${opt:stage, self:provider.stage}.PROFILE}
   tags:
     client: ${file(env.yml):${opt:stage, self:provider.stage}.CLIENT}
-#  iamRoleStatements:
-#    - Effect: Allow
-#      Action:
-#        - dynamodb:DescribeTable
-#        - dynamodb:Query
-#        - dynamodb:Scan
-#        - dynamodb:GetItem
-#        - dynamodb:PutItem
-#        - dynamodb:DeleteItem
-#        - dynamodb:UpdateItem
-#        - dynamodb:BatchGetItem
-#        - dynamodb:BatchWriteItem
-#      Resource:
-#        - arn:aws:dynamodb:*:*:table/${file(env.yml):${opt:stage, self:provider.stage}.USERS_TABLE}
-#    - Effect: Allow
-#      Action:
-#        - dynamodb:DescribeTable
-#        - dynamodb:Query
-#        - dynamodb:Scan
-#        - dynamodb:GetItem
-#        - dynamodb:PutItem
-#        - dynamodb:DeleteItem
-#        - dynamodb:UpdateItem
-#        - dynamodb:BatchGetItem
-#        - dynamodb:BatchWriteItem
-#      Resource:
-#        - arn:aws:dynamodb:*:*:table/${file(env.yml):${opt:stage, self:provider.stage}.JOBS_TABLE}
-#        - arn:aws:dynamodb:*:*:table/${file(env.yml):${opt:stage, self:provider.stage}.JOBS_TABLE}/index/*
-#    - Effect: Allow
-#      Action:
-#        - s3:*
-#      Resource:
-#        - arn:aws:s3:::${file(env.yml):${opt:stage, self:provider.stage}.BUCKET}
-#        - arn:aws:s3:::${file(env.yml):${opt:stage, self:provider.stage}.BUCKET}/*
-#    - Effect: Allow
-#      Action:
-#        - es:*
-#      Resource:
-#        - arn:aws:es:*:*:domain/${file(env.yml):${opt:stage, self:provider.stage}.ELASTIC_SEARCH_DOMAIN}
-#        - arn:aws:es:*:*:domain/${file(env.yml):${opt:stage, self:provider.stage}.ELASTIC_SEARCH_DOMAIN}/*
-#    - Effect: Allow
-#      Action:
-#        - ses:SendEmail
-#      Resource: '*'
-#    - Effect: Allow
-#      Action:
-#        - sqs:DeleteMessage
-#        - sqs:ReceiveMessage
-#        - sqs:SendMessage
-#      Resource: arn:aws:sqs:*:*:${file(env.yml):${opt:stage, self:provider.stage}.SQS}
-#    - Effect: Allow
-#      Action:
-#        - sns:CreatePlatformEndpoint
-#        - sns:DeleteEndpoint
-#        - sns:Publish
-#      Resource:
-#        - ${file(env.yml):${opt:stage, self:provider.stage}.SNS_ANDROID_APPLICATION_ARN}
-#        - ${file(env.yml):${opt:stage, self:provider.stage}.SNS_IOS_APPLICATION_ARN}
-
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - cloudformation:DescribeStacks
+      Resource:
+        - arn:aws:cloudformation:*:*:stack/${file(env.yml):${opt:stage, self:provider.stage}.CLOUDFORMATION_STACK_NAME}/*
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - !GetAtt IconikTokensTable.Arn
+        - !Sub
+          - '${arn}/index/*'
+          - arn: !GetAtt IconikTokensTable.Arn
+    #        - !GetAtt UsersTable.Arn
+    #        - !Sub
+    #          - '${arn}/index/*'
+    #          - arn: !GetAtt UsersTable.Arn
+    #        - !GetAtt JobsTable.Arn
+    #        - !Sub
+    #          - '${arn}/index/*'
+    #          - arn: !GetAtt JobsTable.Arn
+    #    - Effect: Allow
+    #      Action:
+    #        - s3:*
+    #      Resource:
+    #        - arn:aws:s3:::${file(env.yml):${opt:stage, self:provider.stage}.BUCKET}
+    #        - arn:aws:s3:::${file(env.yml):${opt:stage, self:provider.stage}.BUCKET}/*
+    #    - Effect: Allow
+    #      Action:
+    #        - es:*
+    #      Resource:
+    #        - arn:aws:es:*:*:domain/${file(env.yml):${opt:stage, self:provider.stage}.ELASTIC_SEARCH_DOMAIN}
+    #        - arn:aws:es:*:*:domain/${file(env.yml):${opt:stage, self:provider.stage}.ELASTIC_SEARCH_DOMAIN}/*
+    #    - Effect: Allow
+    #      Action:
+    #        - ses:SendEmail
+    #      Resource: '*'
+    #    - Effect: Allow
+    #      Action:
+    #        - sqs:DeleteMessage
+    #        - sqs:ReceiveMessage
+    #        - sqs:SendMessage
+    #      Resource: arn:aws:sqs:*:*:${file(env.yml):${opt:stage, self:provider.stage}.SQS}
+    #    - Effect: Allow
+    #      Action:
+    #        - sns:CreatePlatformEndpoint
+    #        - sns:DeleteEndpoint
+    #        - sns:Publish
+    #      Resource:
+    #        - ${file(env.yml):${opt:stage, self:provider.stage}.SNS_ANDROID_APPLICATION_ARN}
+    #        - ${file(env.yml):${opt:stage, self:provider.stage}.SNS_IOS_APPLICATION_ARN}
+    - Effect: Allow
+      Action:
+        - events:PutRule
+        - events:DescribeRule
+        - events:PutTargets
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - lambda:AddPermission
+      Resource: '*'
 #resources:
 #  Resources:
 #    UserPool:
@@ -129,6 +133,11 @@ custom:
       test: 'win-test-subscribe'
       prod: 'win-prod-subscribe'
   tablesNames:
+    IconikTokensTable:
+      local: 'IconikTokens-local'
+      dev: 'IconikTokens-dev'
+      test: 'IconikTokens-test'
+      prod: 'IconikTokens'
     UsersTable:
       local: 'Users-local'
       dev: 'Users-dev'
@@ -139,27 +148,23 @@ custom:
       dev: 'Jobs-dev'
       test: 'Jobs-test'
       prod: 'Jobs'
-  customActionsURLs:
-    GetMediaInfo:
-      local: '${file(env.yml):local.OFFLINE_API_BASE_URL}api/media-info'
-      dev: !Sub
-        - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/${path}'
-        - gatewayId: !Ref ApiGatewayRestApi
-          region: !Ref AWS::Region
-          suffix: !Ref AWS::URLSuffix
-          path: 'api/media-info'
-      test: !Sub
-        - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/${path}'
-        - gatewayId: !Ref ApiGatewayRestApi
-          region: !Ref AWS::Region
-          suffix: !Ref AWS::URLSuffix
-          path: 'api/media-info'
-      prod: !Sub
-        - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/${path}'
-        - gatewayId: !Ref ApiGatewayRestApi
-          region: !Ref AWS::Region
-          suffix: !Ref AWS::URLSuffix
-          path: 'api/media-info'
+  apiBaseURL:
+    local: '${file(env.yml):local.OFFLINE_API_BASE_URL}'
+    dev: !Sub
+      - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/'
+      - gatewayId: !Ref ApiGatewayRestApi
+        region: !Ref AWS::Region
+        suffix: !Ref AWS::URLSuffix
+    test: !Sub
+      - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/'
+      - gatewayId: !Ref ApiGatewayRestApi
+        region: !Ref AWS::Region
+        suffix: !Ref AWS::URLSuffix
+    prod: !Sub
+      - 'https://${gatewayId}.execute-api.${region}.${suffix}/${opt:stage, self:provider.stage}/'
+      - gatewayId: !Ref ApiGatewayRestApi
+        region: !Ref AWS::Region
+        suffix: !Ref AWS::URLSuffix
   dirconfig:
     quiet: true
   webpack:
