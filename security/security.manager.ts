@@ -79,8 +79,10 @@ export class SecurityManager {
   }
 
   async refreshTokens(iconikService: IconikService): Promise<{ message: string }> {
-    const customActions: CustomActionSchema[] = await this.service.getCustomActions(iconikService);
-    const webHooks: WebhookResponseSchema[] = await this.service.getWebHooks(iconikService);
+    const [customActions, webHooks] = await Promise.all([
+      this.service.getCustomActions(iconikService),
+      this.service.getWebHooks(iconikService),
+    ]);
 
     const invalidationTokens: IconikTokenSchema[] = this.service.getTokensFromWHandCA(webHooks, customActions);
     if (invalidationTokens?.length) {
