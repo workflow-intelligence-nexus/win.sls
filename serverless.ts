@@ -1,9 +1,9 @@
 import './config/serverless/stage-loader';
-import type { AWS } from '@serverless/typescript';
 import { deployTestConfig } from './config/serverless/parts/deploy-test';
 import { iconikAppAdminConfig } from './config/serverless/parts/iconik-app-admin';
 import { GetAtt, Ref, Sub } from './config/serverless/cf-intristic-fn';
 import { getStage, joinParts } from './config/serverless/utils';
+import { CustomServerless } from 'config/serverless/custom-config';
 
 const DEPLOYMENT_BUCKET = 'clients-serverless-deployment-bucket';
 const CLIENT = '${param:CLIENT}';
@@ -12,7 +12,7 @@ const STAGE = '${opt:stage, "dev"}';
 const REGION = '${param:REGION}';
 const PROFILE = '${param:PROFILE}';
 
-const masterConfig: AWS = {
+const masterConfig: CustomServerless = {
   service: SERVICE_NAME, // See https://www.serverless.com/framework/docs/guides/parameters#stage-parameters
   params: {
     // default parameters
@@ -147,6 +147,7 @@ const masterConfig: AWS = {
     'serverless-offline',
     // 'serverless-offline-sqs',
     // 'serverless-offline-sns',
+    // 'serverless-step-functions',
     'serverless-prune-plugin',
   ],
 };

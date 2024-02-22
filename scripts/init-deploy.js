@@ -119,7 +119,7 @@ function loadEnvs() {
     envs.PROFILE = getParam(out, 'PROFILE', env);
     envs.SERVICE_NAME = out.service;
   } catch (error) {
-    console.error(error);
+    console.log(error.stdout.toString());
     throw new Error('Unable to get envs');
   }
 }
