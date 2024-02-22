@@ -88,6 +88,7 @@
     "serverless-offline-sns": "0.77.2",
     "serverless-offline-sqs": "8.0.0",
     "serverless-prune-plugin": "2.0.2",
+    "serverless-step-functions": "^3.19.0",
     "sonarqube-scanner": "^3.3.0",
     "sonarqube-verify": "^1.0.2",
     "ts-jest": "29.1.2",
