@@ -1,7 +1,8 @@
 import { IconikService } from '@workflowwin/iconik-api';
 import * as logger from '@helper/logger';
-import { buildCustomActionsSchema, metadataSchema } from './schemas';
 import { IconikCredentialsStorage } from '@services/IconikCredentialsStorage';
+import { buildCustomActionsSchema, metadataSchema } from './schemas';
+import { SERVICE_INSTALLED_FIELD } from './install-check';
 
 export class InstallManager {
   private iconikCredentialsStorage = new IconikCredentialsStorage();
@@ -28,6 +29,11 @@ export class InstallManager {
   }
 
   public async isInstalled(): Promise<boolean> {
-    return false;
+    try {
+      await this.iconik.metadata.getMetadataField(SERVICE_INSTALLED_FIELD);
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 }
