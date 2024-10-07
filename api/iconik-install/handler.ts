@@ -10,7 +10,7 @@ import { InstallManager } from './lib';
  * Thia function provides installation process to create Icnok Custom Actions,
  * Metadata Fields, Metadata Values or Webhooks.
  *
- * Edit lib/schematics to define what Iconik resources should be created during deployment
+ * Edit lib/schemas to define what Iconik resources should be created during deployment
  */
 export const handler: CloudFormationCustomResourceHandler = async (event, context) => {
   logger.info('event', { event });
