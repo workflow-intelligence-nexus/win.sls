@@ -3,6 +3,7 @@ import * as logger from '@helper/logger';
 import { IconikCredentialsStorage } from '@services/IconikCredentialsStorage';
 import { buildCustomActionsSchema, metadataSchema } from './schemas';
 import { SERVICE_INSTALLED_FIELD } from './install-check';
+import { getEnv } from '@helper/environment';
 
 export class InstallManager {
   private iconikCredentialsStorage = new IconikCredentialsStorage();
@@ -23,7 +24,7 @@ export class InstallManager {
 
     logger.debug('boostrap custom actions');
     const credentials = await this.iconikCredentialsStorage.get();
-    const customActionsSchema = buildCustomActionsSchema(credentials.appId, '/');
+    const customActionsSchema = buildCustomActionsSchema(credentials.appId, getEnv('BASE_HTTP_API_URL', true));
     const customActions = this.iconik.extensions.bootstrap.createCustomActionsBootstrap(customActionsSchema);
     await customActions.bootstrap();
   }
