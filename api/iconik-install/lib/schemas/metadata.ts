@@ -10,4 +10,15 @@ export const metadataSchema: IconikMetadataBootstrapSchema = {
       },
     },
   },
+  views: [
+    {
+      properties: {
+        name: 'win_InstallationExampleView',
+      },
+      fields: {
+        win_InstallationExample: {},
+      },
+      categories: ['custom_actions'],
+    },
+  ],
 };
