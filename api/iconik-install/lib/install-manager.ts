@@ -1,7 +1,7 @@
 import { IconikService } from '@workflowwin/iconik-api';
 import * as logger from '@helper/logger';
 import { IconikCredentialsStorage } from '@services/IconikCredentialsStorage';
-import { buildCustomActionsSchema, metadataSchema } from './schemas';
+import { buildCustomActionsSchema, metadataSchema, webhooksSchema } from './schemas';
 import { SERVICE_INSTALLED_FIELD } from './install-check';
 import { getEnv } from '@helper/environment';
 
@@ -27,6 +27,10 @@ export class InstallManager {
     const customActionsSchema = buildCustomActionsSchema(credentials.appId, getEnv('BASE_HTTP_API_URL', true));
     const customActions = this.iconik.extensions.bootstrap.createCustomActionsBootstrap(customActionsSchema);
     await customActions.bootstrap();
+
+    logger.debug('boostrap webhooks');
+    const webhooks = this.iconik.extensions.bootstrap.createWebhooksBootstrap(webhooksSchema);
+    await webhooks.bootstrap();
   }
 
   public async isInstalled(): Promise<boolean> {
