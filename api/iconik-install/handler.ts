@@ -7,7 +7,7 @@ import { InstallManager } from './lib';
 /**
  * Install the feature on Iconik on deploy.
  *
- * Thia function provides installation process to create Icnok Custom Actions,
+ * This function provides installation process to create Iconik Custom Actions,
  * Metadata Fields, Metadata Values or Webhooks.
  *
  * Edit lib/schemas to define what Iconik resources should be created during deployment
